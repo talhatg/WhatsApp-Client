@@ -7,7 +7,7 @@ const { open } = require('sqlite');
 const TelegramBot = require('node-telegram-bot-api');
 const crypto = require('crypto');
 const fs = require('fs');
-const path = require('path');
+
 
 const PORT = process.env.PORT || 3000;
 const BOT_TOKEN = process.env.KEY_ISSUER_BOT_TOKEN;
@@ -131,4 +131,5 @@ async function initDb() {
     console.warn('KEY_ISSUER_BOT_TOKEN missing — bot disabled');
   }
 })();
+
 
