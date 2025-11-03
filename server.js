@@ -10,6 +10,7 @@ const fs = require('fs');
 
 
 const PORT = process.env.PORT || 3000;
+const HOST = '0.0.0.0';
 const BOT_TOKEN = process.env.KEY_ISSUER_BOT_TOKEN;
 const REQUIRED_CHAT_ID = process.env.REQUIRED_CHAT_ID;
 const OPTIONAL_CHAT_IDS = (process.env.OPTIONAL_CHAT_IDS || '').split(',').filter(Boolean);
@@ -95,9 +96,9 @@ async function initDb() {
   });
 
   // Start server (localhost — reverse proxy ???? ?????? ???)
-  app.listen(PORT, '127.0.0.1', () => {
-    console.log(`Key server listening http://127.0.0.1:${PORT}${BASE}`);
-  });
+app.listen(PORT, HOST, () => {
+  console.log(`Key server listening on http://${HOST}:${PORT}${BASE_PATH}`);
+});
 
   // (Optional) Telegram key issuer bot
   if (BOT_TOKEN) {
@@ -131,5 +132,6 @@ async function initDb() {
     console.warn('KEY_ISSUER_BOT_TOKEN missing — bot disabled');
   }
 })();
+
 
 
