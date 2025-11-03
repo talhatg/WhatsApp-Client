@@ -6,6 +6,8 @@ const sqlite3 = require('sqlite3').verbose();
 const { open } = require('sqlite');
 const TelegramBot = require('node-telegram-bot-api');
 const crypto = require('crypto');
+const fs = require('fs');
+const path = require('path');
 
 const PORT = process.env.PORT || 3000;
 const BOT_TOKEN = process.env.KEY_ISSUER_BOT_TOKEN;
@@ -14,9 +16,16 @@ const OPTIONAL_CHAT_IDS = (process.env.OPTIONAL_CHAT_IDS || '').split(',').filte
 const BASE = process.env.BASE_PATH || '/seven';
 
 async function initDb() {
-  // ? env ? DB_FILE, fallback to local keys.db
-  const dbFile = process.env.DB_FILE || path.resolve(__dirname, 'keys.db');
+  let dbFile = process.env.DB_FILE;
+  if (!dbFile) {
+    dbFile = path.resolve(__dirname, 'keys.db');  // ফ্রিতে এখানে সেভ
+  }
   console.log('[DB]', dbFile);
+
+  const dir = path.dirname(dbFile);
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
 
   const db = await open({ filename: dbFile, driver: sqlite3.Database });
   await db.exec(`CREATE TABLE IF NOT EXISTS keys (
@@ -122,3 +131,4 @@ async function initDb() {
     console.warn('KEY_ISSUER_BOT_TOKEN missing — bot disabled');
   }
 })();
+
